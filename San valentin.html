@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paela, ¿Serías mi San Valentín?</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb);
+      background-size: 300% 300%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      color: #333;
+      animation: gradientAnimation 8s ease infinite;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      max-width: 500px;
+      animation: fadeIn 2s ease-in-out;
+    }
+    h1 {
+      font-size: 3rem;
+      color: #ff6b6b;
+      animation: textBounce 2s infinite alternate;
+    }
+    p {
+      font-size: 1.3rem;
+      margin-top: 15px;
+    }
+    button {
+      background-color: #ff6b6b;
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 25px;
+      transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background-color: #ff5252;
+      box-shadow: 0 0 20px #ff6b6b;
+      transform: translateY(-5px);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .heart {
+      width: 15px;
+      height: 15px;
+      background: red;
+      position: absolute;
+      transform: rotate(45deg);
+      animation: float 6s ease-in infinite;
+    }
+    .heart::before, .heart::after {
+      content: '';
+      width: 15px;
+      height: 15px;
+      background: red;
+      border-radius: 50%;
+      position: absolute;
+    }
+    .heart::before {
+      top: -7px;
+      left: 0;
+    }
+    .heart::after {
+      left: 7px;
+      top: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-800px) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 100% 50%;
+      }
+    }
+
+    @keyframes textBounce {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .question-container {
+      margin-bottom: 20px;
+    }
+
+    .response-container {
+      margin-top: 15px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      resize: none;
+    }
+
+    .response-summary {
+      margin-top: 20px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="question-container">
+    <h1>Paela ❤️</h1>
+    <p>Desde que te conocí, mi vida cambió de maneras que no imaginaba. Ahora quiero hacerte algunas preguntas...</p>
+    <button onclick="startQuestions()">¡Vamos! 😊</button>
+  </div>
+
+  <div class="hearts" id="hearts-container"></div>
+
+  <script>
+    const questions = [
+      "¿Cuál es tu recuerdo favorito juntos?",
+      "¿Qué es lo que más te gusta de nosotros como pareja?",
+      "¿Si pudieras elegir un lugar para una cita perfecta, cuál sería?",
+      "¿Qué canción describe mejor nuestra relación?",
+      "¿Qué significa para ti el amor?"
+    ];
+    let currentQuestion = 0;
+    const responses = []; // Array para guardar las respuestas
+
+    function startQuestions() {
+      document.getElementById('question-container').innerHTML = `
+        <div class="question-container">
+          <h2>${questions[currentQuestion]}</h2>
+        </div>
+        <div class="response-container">
+          <textarea id="response" placeholder="Escribe tu respuesta aquí..."></textarea>
+        </div>
+        <button onclick="nextQuestion()">Siguiente pregunta ➡️</button>
+      `;
+    }
+
+    function nextQuestion() {
+      const response = document.getElementById('response').value;
+      if (response.trim() === "") {
+        alert("Por favor, responde a la pregunta antes de continuar.");
+        return;
+      }
+      responses.push(response); // Guardar la respuesta
+
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        document.getElementById('question-container').innerHTML = `
+          <div class="question-container">
+            <h2>${questions[currentQuestion]}</h2>
+          </div>
+          <div class="response-container">
+            <textarea id="response" placeholder="Escribe tu respuesta aquí..."></textarea>
+          </div>
+          <button onclick="nextQuestion()">Siguiente pregunta ➡️</button>
+        `;
+      } else {
+        showFinalQuestion();
+      }
+    }
+
+    function showFinalQuestion() {
+      document.getElementById('question-container').innerHTML = `
+        <h1>Paela ❤️</h1>
+        <p>Después de responder todo esto... solo me queda una pregunta:</p>
+        <h2>¿Serías mi San Valentín? 🌹</h2>
+        <button onclick="showMessage()">¡Claro que sí! 😊</button>
+      `;
+    }
+
+    function showMessage() {
+      document.getElementById('question-container').innerHTML = `
+        <h1>¡Gracias por decir que sí, Paela! ❤️</h1>
+        <p>Este San Valentín será inolvidable 🌹</p>
+        <h3>Resumen de tus respuestas:</h3>
+        <div class="response-summary">
+          ${responses.map((response, index) => `
+            <p><strong>Pregunta ${index + 1}:</strong> ${questions[index]}</p>
+            <p><strong>Respuesta:</strong> ${response}</p>
+            <hr />
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      const size = Math.random() * 20 + 10;
+      heart.style.width = `${size}px`;
+      heart.style.height = `${size}px`;
+      heart.style.left = `${Math.random() * 100}vw`;
+      heart.style.animationDuration = `${Math.random() * 3 + 2}s`;
+      document.getElementById('hearts-container').appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+
+    setInterval(createHeart, 200);
+  </script>
+</body>
+</html>
